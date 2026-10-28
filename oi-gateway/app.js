@@ -1,0 +1,6 @@
+const http=require('http');
+const port=Number(process.env.PORT||8080);
+const targets={attendance:process.env.ATTENDANCE_URL||'http://oi-attendence:8585',core:process.env.CORE_URL||'http://oi-core:9595',track:process.env.TRACK_URL||'http://oi-track:7575'};
+function send(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(data))}
+const server=http.createServer(async(req,res)=>{if(req.url==='/health')return send(res,200,{service:'oi-gateway',status:'ok'});const m=req.url.match(/^\/api\/(attendance|core|track)(\/.*)?$/);if(!m)return send(res,404,{error:'route not found',routes:['/api/attendance','/api/core','/api/track']});const target=new URL(m[2]||'/',targets[m[1]]);try{const chunks=[];for await(const c of req)chunks.push(c);const body=Buffer.concat(chunks);const up=await fetch(target,{method:req.method,headers:{'content-type':req.headers['content-type']||'application/json','accept':req.headers.accept||'application/json'},body:['GET','HEAD'].includes(req.method)?undefined:body});const text=await up.text();res.writeHead(up.status,{'Content-Type':up.headers.get('content-type')||'application/json'});res.end(text)}catch(e){send(res,502,{error:'upstream unavailable',service:m[1],detail:e.message})}});
+server.listen(port,'0.0.0.0',()=>console.log(`oi-gateway listening on ${port}`));

@@ -1,0 +1,42 @@
+
+/* Request URL details */
+
+.request-info {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 16px;
+  background: #0b1525;
+  border: 1px solid #263650;
+  border-radius: 12px;
+}
+
+.request-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.request-label {
+  color: #8ea9d2;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.request-row code {
+  color: #c5d8f5;
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+#request-url {
+  color: #7fb4ff;
+}
+
+#request-flow {
+  color: #9ee6c1;
+}
